@@ -109,13 +109,16 @@ int main(void)
   MX_TIM3_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_Base_Start(&htim2); //Start timer to to provide trigger for the adc conversion
-  HAL_ADC_Start_IT(&hadc1);
+//  HAL_TIM_Base_Start(&htim2); //Start timer to to provide trigger for the adc conversion
+//  HAL_ADC_Start_IT(&hadc1);
 #ifdef BOARD_FRAM_IN_USE
   fram_init();
 #endif
 
-  motor_start();
+  HAL_TIM_Base_Start(&htim1);
+  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
+  __HAL_TIM_SET_DUTYCYCLE(&htim1, TIM_CHANNEL_1, 90);
+//  motor_start();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -128,7 +131,7 @@ int main(void)
   /* USER CODE BEGIN 3 */
 	  HAL_GPIO_TogglePin(LD2_GPIO_Port,LD2_Pin);
 	  HAL_Delay(blinkDelay); //Busy wait
-	  TIM1->CCER &= ~0x01;
+	  //TIM1->CCER &= ~0x01;
   }
   /* USER CODE END 3 */
 
