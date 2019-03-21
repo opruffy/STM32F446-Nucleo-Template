@@ -8,6 +8,6 @@
 #ifndef MOTOR_H_
 #define MOTOR_H_
 
-void motor_start();
+void HAL_TIM_PeriodElapsedCallback();
 
 #endif /* MOTOR_H_ */

@@ -113,12 +113,24 @@ int main(void)
 //  HAL_ADC_Start_IT(&hadc1);
 #ifdef BOARD_FRAM_IN_USE
   fram_init();
-#endif
 
+#endif
   HAL_TIM_Base_Start(&htim1);
-  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
-  __HAL_TIM_SET_DUTYCYCLE(&htim1, TIM_CHANNEL_1, 90);
-//  motor_start();
+  HAL_TIM_Base_Start(&htim3);
+
+//  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
+//  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
+//  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_3);
+
+//  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+//  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
+//  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
+
+//  __HAL_TIM_SET_DUTYCYCLE(&htim1, TIM_CHANNEL_1, 100);
+//  __HAL_TIM_SET_DUTYCYCLE(&htim1, TIM_CHANNEL_2, 100);
+//  __HAL_TIM_SET_DUTYCYCLE(&htim1, TIM_CHANNEL_3, 100);
+  //  motor_start();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */

@@ -50,21 +50,56 @@
 
 /* Private define ------------------------------------------------------------*/
 
-#define B1_Pin GPIO_PIN_13
-#define B1_GPIO_Port GPIOC
-#define B1_EXTI_IRQn EXTI15_10_IRQn
-#define USART_TX_Pin GPIO_PIN_2
-#define USART_TX_GPIO_Port GPIOA
-#define USART_RX_Pin GPIO_PIN_3
-#define USART_RX_GPIO_Port GPIOA
-#define LD2_Pin GPIO_PIN_5
-#define LD2_GPIO_Port GPIOA
-#define TMS_Pin GPIO_PIN_13
-#define TMS_GPIO_Port GPIOA
-#define TCK_Pin GPIO_PIN_14
-#define TCK_GPIO_Port GPIOA
-#define SWO_Pin GPIO_PIN_3
-#define SWO_GPIO_Port GPIOB
+// BLDC
+//#define PERIOD_START_VALUE	2000
+
+// Schritt
+#define PERIOD_START_VALUE	200
+
+
+/* Private GPIO defines ------------------*/
+#define B1_Pin 				GPIO_PIN_13
+#define B1_GPIO_Port 		GPIOC
+#define B1_EXTI_IRQn 		EXTI15_10_IRQn
+
+#define USART_TX_Pin 		GPIO_PIN_2
+#define USART_TX_GPIO_Port 	GPIOA
+#define USART_RX_Pin 		GPIO_PIN_3
+#define USART_RX_GPIO_Port 	GPIOA
+
+#define LD2_Pin 			GPIO_PIN_5
+#define LD2_GPIO_Port 		GPIOA
+
+#define TMS_Pin 			GPIO_PIN_13
+#define TMS_GPIO_Port 		GPIOA
+
+#define TCK_Pin 			GPIO_PIN_14
+#define TCK_GPIO_Port 		GPIOA
+
+#define SWO_Pin 			GPIO_PIN_3
+#define SWO_GPIO_Port 		GPIOB
+
+#define P1_Pin 				GPIO_PIN_15
+#define P1_GPIO_Port	 	GPIOB
+
+#define P2_Pin 				GPIO_PIN_14
+#define P2_GPIO_Port	 	GPIOB
+
+#define P3_Pin 				GPIO_PIN_13
+#define P3_GPIO_Port	 	GPIOB
+
+
+#define S1a_Pin				GPIO_PIN_7
+#define S1a_GPIO_Port	 	GPIOA
+
+#define S1b_Pin 			GPIO_PIN_8
+#define S1b_GPIO_Port	 	GPIOA
+
+#define S2a_Pin				GPIO_PIN_9
+#define S2a_GPIO_Port	 	GPIOA
+
+#define S2b_Pin				GPIO_PIN_10
+#define S2b_GPIO_Port	 	GPIOA
 
 /* ########################## Assert Selection ############################## */
 /**
