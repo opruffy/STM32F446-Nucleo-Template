@@ -142,7 +142,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		uint8_t BL3 = commutationTable[commutation_counter][5];
 
 		commutation_counter++;
-
 		if(commutation_counter > 5)
 		{
 			commutation_counter = 0;

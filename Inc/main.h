@@ -51,10 +51,13 @@
 /* Private define ------------------------------------------------------------*/
 
 // BLDC
-//#define PERIOD_START_VALUE	2000
+#define USE_BLDC
+#define PERIOD_START_VALUE		2000
+#define PRESCALER_START_VALUE	5000
 
 // Schritt
-#define PERIOD_START_VALUE	200
+//#define SCHRITTMOTOR
+//#define PERIOD_START_VALUE	200
 
 
 /* Private GPIO defines ------------------*/
