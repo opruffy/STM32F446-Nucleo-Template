@@ -41,6 +41,7 @@
 #include "gpio.h"
 /* USER CODE BEGIN 0 */
 #include "main.h"
+#include "motor.h"
 /* USER CODE END 0 */
 
 /*----------------------------------------------------------------------------*/
@@ -72,31 +73,57 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = B1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = LD2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
 
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
+  //--------TEST PINS
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(TEST1_GPIO_Port, TEST1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(TEST2_GPIO_Port, TEST2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(TEST3_GPIO_Port, TEST3_Pin, GPIO_PIN_RESET);
 
-  /* BACK EMF Input Pins
-   *
-   */
-
-  GPIO_InitStruct.Pin = P1_Pin;
-  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = TEST1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  HAL_GPIO_Init(P1_GPIO_Port, &GPIO_InitStruct);
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(TEST1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = TEST2_Pin;
+  HAL_GPIO_Init(TEST2_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = TEST3_Pin;
+  HAL_GPIO_Init(TEST3_GPIO_Port, &GPIO_InitStruct);
+
+
+  // EXTI
+  /*Configure GPIO pin :  */
+  GPIO_InitStruct.Pin = B1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin :  */
+  GPIO_InitStruct.Pin = B2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(B2_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin :  */
+  GPIO_InitStruct.Pin = B3_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(B3_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 }
 
 /* USER CODE BEGIN 2 */
@@ -105,15 +132,41 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   switch(GPIO_Pin)
   {
   case B1_Pin: //External Interrupt on B1
-	  if(blinkDelay == 1000)
-	  {
-		  blinkDelay = 100;
-	  }
+
+	  if(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) != GPIO_PIN_RESET)
+		  // P1 rising edge
+	  	  set_kommutierung(4);
 	  else
-	  {
-		  blinkDelay = 1000;
-	  }
+		  // P1 falling edge
+	  	  set_kommutierung(1);
 	  break;
+
+  case B2_Pin:
+
+	  if(HAL_GPIO_ReadPin(B2_GPIO_Port, B2_Pin) != GPIO_PIN_RESET)
+		  // P2 rising edge
+	  	  set_kommutierung(0);
+	  else
+		  // P2 falling edge
+	  	  set_kommutierung(3);
+	  break;
+
+  case B3_Pin:
+
+	  if(HAL_GPIO_ReadPin(B3_GPIO_Port, B3_Pin) != GPIO_PIN_RESET)
+		  // P3 rising edge
+	  	  set_kommutierung(2);
+	  else
+		  // P3 falling edge
+	  	  set_kommutierung(5);
+	  break;
+
+//  case B1_Pin: //External Interrupt on B1
+//  case B2_Pin:
+//  case B3_Pin:
+//	  kommutierung_counter();
+//	  break;
+
   default:
 	  break;
   }

@@ -25,26 +25,14 @@ static volatile uint8_t commutation_counter = 0;
 const static uint8_t commutationTable[6][6] =
 {
 //		H1	L1	H2	L2	H3	L3
-	{	0, 	1,	1, 	0, 	0, 	0 },
-	{	0, 	1, 	0, 	0, 	1, 	0 },
-	{	0, 	0, 	0, 	1, 	1, 	0 },
-	{	1, 	0, 	0, 	1, 	0, 	0 },
-	{	1, 	0, 	0, 	0, 	0, 	1 },
-	{	0, 	0, 	1, 	0, 	0, 	1 },
+	{	0, 	1,	1, 	0, 	0, 	0 },	// P2 - rising edge
+	{	0, 	1, 	0, 	0, 	1, 	0 },	// P1 - falling edge
+	{	0, 	0, 	0, 	1, 	1, 	0 },	// P3 - rising edge
+	{	1, 	0, 	0, 	1, 	0, 	0 },	// P2 - falling edge
+	{	1, 	0, 	0, 	0, 	0, 	1 },	// P1 - rising edge
+	{	0, 	0, 	1, 	0, 	0, 	1 },	// P3 - falling edge
 };
 
-
-#ifdef USE_SCHRITTMOTOR
-static volatile uint8_t schritt_counter = 0;
-const static uint8_t schrittTable_right[4][4] =
-{
-//		S1a	S1b	S2a	S2b
-	{	1, 	0,	1, 	0,	},
-	{	1, 	0, 	0, 	1, 	},
-	{	0, 	1, 	0, 	1, 	},
-	{	0, 	1, 	1, 	0, 	},
-};
-#endif
 
 volatile uint8_t dutycycle = 100;
 volatile uint32_t period_rampe = PERIOD_START_VALUE;
@@ -126,6 +114,32 @@ uint8_t Calc_Period(uint32_t p)
 
 }
 
+void kommutierung_counter(void)
+{
+	commutation_counter++;
+
+	if(commutation_counter > 5)
+	{
+		commutation_counter = 0;
+//		if(period_rampe > 200)
+//		{
+//			period_rampe -= 200;
+//
+////		if(period_rampe > 100)
+////		{
+////			period_rampe -= 100;
+//
+//			htim1.Init.Period = period_rampe;
+//			HAL_TIM_Base_Init(&htim1);
+//		}
+	}
+}
+
+void set_kommutierung(uint8_t counter)
+{
+	commutation_counter = counter;
+
+}
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
@@ -140,20 +154,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 		uint8_t BH3 = commutationTable[commutation_counter][4];
 		uint8_t BL3 = commutationTable[commutation_counter][5];
-
-		commutation_counter++;
-
-		if(commutation_counter > 5)
-		{
-			commutation_counter = 0;
-			if(period_rampe > 200)
-			{
-				period_rampe -= 200;
-
-				htim1.Init.Period = period_rampe;
-				HAL_TIM_Base_Init(&htim1);
-			}
-		}
 
 		if(BH1)
 		{
@@ -219,40 +219,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		if(dutycycle < 100)
 			dutycycle++;
 
-#endif
-
-#ifdef USE_SCHRITTMOTOR
-		uint8_t BS1a = schrittTable_right[schritt_counter][0];
-		uint8_t BS1b = schrittTable_right[schritt_counter][1];
-
-		uint8_t BS2a = schrittTable_right[schritt_counter][2];
-		uint8_t BS2b = schrittTable_right[schritt_counter][3];
-
-		schritt_counter++;
-		if(schritt_counter > 3)
-			schritt_counter = 0;
-
-		if(BS1a)
-		{
-			HAL_GPIO_WritePin(S1a_GPIO_Port, S1a_Pin, GPIO_PIN_SET);
-			HAL_GPIO_WritePin(S1b_GPIO_Port, S1b_Pin, GPIO_PIN_RESET);
-		}
-		else
-		{
-			HAL_GPIO_WritePin(S1a_GPIO_Port, S1a_Pin, GPIO_PIN_RESET);
-			HAL_GPIO_WritePin(S1b_GPIO_Port, S1b_Pin, GPIO_PIN_SET);
-		}
-
-		if(BS2a)
-		{
-			HAL_GPIO_WritePin(S2a_GPIO_Port, S2a_Pin, GPIO_PIN_SET);
-			HAL_GPIO_WritePin(S2b_GPIO_Port, S2b_Pin, GPIO_PIN_RESET);
-		}
-		else
-		{
-			HAL_GPIO_WritePin(S2a_GPIO_Port, S2a_Pin, GPIO_PIN_RESET);
-			HAL_GPIO_WritePin(S2b_GPIO_Port, S2b_Pin, GPIO_PIN_SET);
-		}
 #endif
 	}
 }

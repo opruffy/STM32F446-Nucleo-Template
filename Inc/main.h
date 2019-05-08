@@ -52,7 +52,7 @@
 
 // BLDC
 #define USE_BLDC
-#define PERIOD_START_VALUE		2000
+#define PERIOD_START_VALUE		100
 #define PRESCALER_START_VALUE	5000
 
 // Schritt
@@ -61,14 +61,34 @@
 
 
 /* Private GPIO defines ------------------*/
-#define B1_Pin 				GPIO_PIN_13
+#define B1_Pin 				GPIO_PIN_6
 #define B1_GPIO_Port 		GPIOC
-#define B1_EXTI_IRQn 		EXTI15_10_IRQn
+#define B1_EXTI_IRQn 		EXTI9_5_IRQn
+
+#define B2_Pin 				GPIO_PIN_8
+#define B2_GPIO_Port 		GPIOC
+#define B2_EXTI_IRQn 		EXTI9_5_IRQn
+
+#define B3_Pin 				GPIO_PIN_9
+#define B3_GPIO_Port 		GPIOC
+#define B3_EXTI_IRQn 		EXTI9_5_IRQn
 
 #define USART_TX_Pin 		GPIO_PIN_2
 #define USART_TX_GPIO_Port 	GPIOA
 #define USART_RX_Pin 		GPIO_PIN_3
 #define USART_RX_GPIO_Port 	GPIOA
+
+
+//--Test Pins
+#define TEST1_Pin 			GPIO_PIN_12
+#define TEST1_GPIO_Port 	GPIOB
+
+#define TEST2_Pin 			GPIO_PIN_11
+#define TEST2_GPIO_Port 	GPIOA
+
+#define TEST3_Pin 			GPIO_PIN_12
+#define TEST3_GPIO_Port 	GPIOA
+
 
 #define LD2_Pin 			GPIO_PIN_5
 #define LD2_GPIO_Port 		GPIOA

@@ -79,7 +79,7 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 #ifdef BOARD_UTILITIES_IN_USE
-	system_init();
+  system_init();
 #endif
   /* USER CODE END 1 */
 
