@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project>
-<ProjectName>C:\Users\peter\Desktop\FachvertiefungMechatronik\Fachvertiefung Mechatronik\\Fachvertiefung Mechatronik</ProjectName>
+<ProjectName>C:\Users\MT-LAB\Desktop\FVMI-LAB\STM32F446-Nucleo-Project\\Fachvertiefung Mechatronik</ProjectName>
 <ProjectNature>C</ProjectNature> 
 <CMSIS>..\Drivers\CMSIS</CMSIS>
-<HAL_Driver>C:\Users\peter\STM32Cube\Repository\STM32Cube_FW_F4_V1.21.0\Drivers\CMSIS</HAL_Driver>
+<HAL_Driver>C:\Users\MT-LAB\STM32Cube\Repository\STM32Cube_FW_F4_V1.21.0\Drivers\CMSIS</HAL_Driver>
 <Toolchain>TrueSTUDIO</Toolchain>
 <Version>0</Version>
 

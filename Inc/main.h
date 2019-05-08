@@ -10,7 +10,7 @@
   * inserted by the user or by software development tools
   * are owned by their respective copyright owners.
   *
-  * COPYRIGHT(c) 2018 STMicroelectronics
+  * COPYRIGHT(c) 2019 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -42,87 +42,40 @@
 #define __MAIN_H__
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
 
 /* USER CODE BEGIN Includes */
 #include <inttypes.h>
 /* USER CODE END Includes */
 
 /* Private define ------------------------------------------------------------*/
+#define PERIOD 100
+#define PRESCALER 4999
 
-// BLDC
-#define USE_BLDC
-#define PERIOD_START_VALUE		100
-#define PRESCALER_START_VALUE	5000
-
-// Schritt
-//#define SCHRITTMOTOR
-//#define PERIOD_START_VALUE	200
-
-
-/* Private GPIO defines ------------------*/
-#define B1_Pin 				GPIO_PIN_6
-#define B1_GPIO_Port 		GPIOC
-#define B1_EXTI_IRQn 		EXTI9_5_IRQn
-
-#define B2_Pin 				GPIO_PIN_8
-#define B2_GPIO_Port 		GPIOC
-#define B2_EXTI_IRQn 		EXTI9_5_IRQn
-
-#define B3_Pin 				GPIO_PIN_9
-#define B3_GPIO_Port 		GPIOC
-#define B3_EXTI_IRQn 		EXTI9_5_IRQn
-
-#define USART_TX_Pin 		GPIO_PIN_2
-#define USART_TX_GPIO_Port 	GPIOA
-#define USART_RX_Pin 		GPIO_PIN_3
-#define USART_RX_GPIO_Port 	GPIOA
-
-
-//--Test Pins
-#define TEST1_Pin 			GPIO_PIN_12
-#define TEST1_GPIO_Port 	GPIOB
-
-#define TEST2_Pin 			GPIO_PIN_11
-#define TEST2_GPIO_Port 	GPIOA
-
-#define TEST3_Pin 			GPIO_PIN_12
-#define TEST3_GPIO_Port 	GPIOA
-
-
-#define LD2_Pin 			GPIO_PIN_5
-#define LD2_GPIO_Port 		GPIOA
-
-#define TMS_Pin 			GPIO_PIN_13
-#define TMS_GPIO_Port 		GPIOA
-
-#define TCK_Pin 			GPIO_PIN_14
-#define TCK_GPIO_Port 		GPIOA
-
-#define SWO_Pin 			GPIO_PIN_3
-#define SWO_GPIO_Port 		GPIOB
-
-#define P1_Pin 				GPIO_PIN_15
-#define P1_GPIO_Port	 	GPIOB
-
-#define P2_Pin 				GPIO_PIN_14
-#define P2_GPIO_Port	 	GPIOB
-
-#define P3_Pin 				GPIO_PIN_13
-#define P3_GPIO_Port	 	GPIOB
-
-
-#define S1a_Pin				GPIO_PIN_7
-#define S1a_GPIO_Port	 	GPIOA
-
-#define S1b_Pin 			GPIO_PIN_8
-#define S1b_GPIO_Port	 	GPIOA
-
-#define S2a_Pin				GPIO_PIN_9
-#define S2a_GPIO_Port	 	GPIOA
-
-#define S2b_Pin				GPIO_PIN_10
-#define S2b_GPIO_Port	 	GPIOA
+#define B1_Pin GPIO_PIN_13
+#define B1_GPIO_Port GPIOC
+#define LD2_Pin GPIO_PIN_5
+#define LD2_GPIO_Port GPIOA
+#define P3_EN_Pin GPIO_PIN_13
+#define P3_EN_GPIO_Port GPIOB
+#define P2_EN_Pin GPIO_PIN_14
+#define P2_EN_GPIO_Port GPIOB
+#define P1_EN_Pin GPIO_PIN_15
+#define P1_EN_GPIO_Port GPIOB
+#define P1_COMP_Pin GPIO_PIN_6
+#define P1_COMP_GPIO_Port GPIOC
+#define P1_COMP_EXTI_IRQn EXTI9_5_IRQn
+#define P2_COMP_Pin GPIO_PIN_8
+#define P2_COMP_GPIO_Port GPIOC
+#define P2_COMP_EXTI_IRQn EXTI9_5_IRQn
+#define P3_COMP_Pin GPIO_PIN_9
+#define P3_COMP_GPIO_Port GPIOC
+#define P3_COMP_EXTI_IRQn EXTI9_5_IRQn
+#define TMS_Pin GPIO_PIN_13
+#define TMS_GPIO_Port GPIOA
+#define TCK_Pin GPIO_PIN_14
+#define TCK_GPIO_Port GPIOA
+#define SWO_Pin GPIO_PIN_3
+#define SWO_GPIO_Port GPIOB
 
 /* ########################## Assert Selection ############################## */
 /**

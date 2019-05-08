@@ -10,7 +10,7 @@
   * inserted by the user or by software development tools
   * are owned by their respective copyright owners.
   *
-  * COPYRIGHT(c) 2018 STMicroelectronics
+  * COPYRIGHT(c) 2019 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -72,6 +72,15 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, P3_EN_Pin|P2_EN_Pin|P1_EN_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = B1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = LD2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -79,97 +88,101 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
 
-
-  //--------TEST PINS
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(TEST1_GPIO_Port, TEST1_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(TEST2_GPIO_Port, TEST2_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(TEST3_GPIO_Port, TEST3_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = TEST1_Pin;
+  /*Configure GPIO pins : PBPin PBPin PBPin */
+  GPIO_InitStruct.Pin = P3_EN_Pin|P2_EN_Pin|P1_EN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(TEST1_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = TEST2_Pin;
-  HAL_GPIO_Init(TEST2_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = TEST3_Pin;
-  HAL_GPIO_Init(TEST3_GPIO_Port, &GPIO_InitStruct);
-
-
-  // EXTI
-  /*Configure GPIO pin :  */
-  GPIO_InitStruct.Pin = B1_Pin;
+  /*Configure GPIO pins : PCPin PCPin PCPin */
+  GPIO_InitStruct.Pin = P1_COMP_Pin|P2_COMP_Pin|P3_COMP_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin :  */
-  GPIO_InitStruct.Pin = B2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(B2_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin :  */
-  GPIO_InitStruct.Pin = B3_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(B3_GPIO_Port, &GPIO_InitStruct);
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+
 }
+
+uint8_t kommutierung_check = 0;
 
 /* USER CODE BEGIN 2 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  switch(GPIO_Pin)
-  {
-  case B1_Pin: //External Interrupt on B1
+	switch(GPIO_Pin)
+	{
+		case P1_COMP_Pin: //External Interrupt on B1
 
-	  if(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) != GPIO_PIN_RESET)
-		  // P1 rising edge
-	  	  set_kommutierung(4);
-	  else
-		  // P1 falling edge
-	  	  set_kommutierung(1);
-	  break;
+			if(HAL_GPIO_ReadPin(P1_COMP_GPIO_Port, P1_COMP_Pin) != GPIO_PIN_RESET)
+			{
+				// P1 rising edge
+				if(kommutierung_check == 5)
+				{
+					set_kommutierung(4);
+					kommutierung_check = 4;
+				}
+			}
+			else
+			{
+				// P1 falling edge
+				if(kommutierung_check == 2)
+				{
+					set_kommutierung(1);
+					kommutierung_check = 1;
+				}
+			}
+			break;
 
-  case B2_Pin:
+		case P2_COMP_Pin:
 
-	  if(HAL_GPIO_ReadPin(B2_GPIO_Port, B2_Pin) != GPIO_PIN_RESET)
-		  // P2 rising edge
-	  	  set_kommutierung(0);
-	  else
-		  // P2 falling edge
-	  	  set_kommutierung(3);
-	  break;
+			if(HAL_GPIO_ReadPin(P2_COMP_GPIO_Port, P2_COMP_Pin) != GPIO_PIN_RESET)
+			{
+				// P2 rising edge
+				if(kommutierung_check == 1)
+				{
+					set_kommutierung(0);
+					kommutierung_check = 0;
+				}
+			}
+			else
+			{
+				// P2 falling edge
+				if(kommutierung_check == 4)
+				{
+					set_kommutierung(3);
+					kommutierung_check = 3;
+				}
+			}
+			break;
 
-  case B3_Pin:
+		case P3_COMP_Pin:
 
-	  if(HAL_GPIO_ReadPin(B3_GPIO_Port, B3_Pin) != GPIO_PIN_RESET)
-		  // P3 rising edge
-	  	  set_kommutierung(2);
-	  else
-		  // P3 falling edge
-	  	  set_kommutierung(5);
-	  break;
+			if(HAL_GPIO_ReadPin(P3_COMP_GPIO_Port, P3_COMP_Pin) != GPIO_PIN_RESET)
+			{
+				// P3 rising edge
+				if(kommutierung_check == 3)
+				{
+					set_kommutierung(2);
+					kommutierung_check = 2;
+				}
+			}
+			else
+			{
+				// P3 falling edge
+				if(kommutierung_check == 0)
+				{
+					set_kommutierung(5);
+					kommutierung_check = 5;
+				}
+			}
+			break;
 
-//  case B1_Pin: //External Interrupt on B1
-//  case B2_Pin:
-//  case B3_Pin:
-//	  kommutierung_counter();
-//	  break;
-
-  default:
-	  break;
-  }
+		default:
+			break;
+	}
 }
 /* USER CODE END 2 */
 

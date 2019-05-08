@@ -10,7 +10,7 @@
   * inserted by the user or by software development tools
   * are owned by their respective copyright owners.
   *
-  * COPYRIGHT(c) 2018 STMicroelectronics
+  * COPYRIGHT(c) 2019 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -40,14 +40,10 @@
 #include "main.h"
 #include "stm32f4xx_hal.h"
 #include "adc.h"
-#include "dma.h"
-#include "i2c.h"
 #include "tim.h"
-#include "usart.h"
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-#include "board_utils.h"
 #include "motor.h"
 /* USER CODE END Includes */
 
@@ -101,13 +97,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
-  MX_USART2_UART_Init();
-  MX_ADC1_Init();
   MX_TIM1_Init();
-  MX_TIM2_Init();
-  MX_TIM3_Init();
-  MX_I2C1_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
 //  HAL_TIM_Base_Start(&htim2); //Start timer to to provide trigger for the adc conversion
 //  HAL_ADC_Start_IT(&hadc1);
@@ -116,7 +107,6 @@ int main(void)
 
 #endif
   HAL_TIM_Base_Start(&htim1);
-  HAL_TIM_Base_Start(&htim3);
 
 //  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
 //  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
