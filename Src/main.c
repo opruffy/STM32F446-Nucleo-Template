@@ -74,10 +74,8 @@ volatile uint16_t blinkDelay = 1000;
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-#ifdef BOARD_UTILITIES_IN_USE
-  system_init();
-#endif
-  /* USER CODE END 1 */
+
+	/* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
 
@@ -100,12 +98,14 @@ int main(void)
   MX_TIM1_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-//  HAL_TIM_Base_Start(&htim2); //Start timer to to provide trigger for the adc conversion
 //  HAL_ADC_Start_IT(&hadc1);
-#ifdef BOARD_FRAM_IN_USE
-  fram_init();
 
-#endif
+
+
+  HAL_TIM_Base_MspInit(&htim1);
+
+  HAL_TIM_Base_Start_IT(&htim1);
+
   HAL_TIM_Base_Start(&htim1);
 
 //  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
@@ -119,7 +119,6 @@ int main(void)
 //  __HAL_TIM_SET_DUTYCYCLE(&htim1, TIM_CHANNEL_1, 100);
 //  __HAL_TIM_SET_DUTYCYCLE(&htim1, TIM_CHANNEL_2, 100);
 //  __HAL_TIM_SET_DUTYCYCLE(&htim1, TIM_CHANNEL_3, 100);
-  //  motor_start();
 
   /* USER CODE END 2 */
 
