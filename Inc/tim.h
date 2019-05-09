@@ -55,11 +55,17 @@ extern TIM_HandleTypeDef htim1;
 
 /* USER CODE BEGIN Private defines */
 
+#define __HAL_TIM_SET_DUTYCYCLE(htim, channel, dutycycle) (__HAL_TIM_SET_COMPARE(htim, channel, (__HAL_TIM_GET_AUTORELOAD(htim) * (dutycycle > 100 ? 100 : dutycycle)) / 100))
+#define __HAL_TIM_GET_DUTYCYCLE(htim, channel) (__HAL_TIM_GET_COMPARE(htim, channel) / (__HAL_TIM_GET_AUTORELOAD(htim) * 100))
+
 /* USER CODE END Private defines */
 
 extern void _Error_Handler(char *, int);
 
 void MX_TIM1_Init(void);
+                    
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+                
 
 /* USER CODE BEGIN Prototypes */
 

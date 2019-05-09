@@ -75,7 +75,7 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
-	/* USER CODE END 1 */
+  /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
 
@@ -98,27 +98,29 @@ int main(void)
   MX_TIM1_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-//  HAL_ADC_Start_IT(&hadc1);
 
 
-
-  HAL_TIM_Base_MspInit(&htim1);
+//
+//  HAL_TIM_MspPostInit(&htim1);
+//
+//  HAL_TIM_Base_MspInit(&htim1);
 
   HAL_TIM_Base_Start_IT(&htim1);
 
   HAL_TIM_Base_Start(&htim1);
 
-//  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
-//  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
-//  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_3);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+
+  HAL_ADC_Start(&hadc1);
+//  HAL_ADC_Start_IT(&hadc1);
 
 //  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
 //  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
 //  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
 
-//  __HAL_TIM_SET_DUTYCYCLE(&htim1, TIM_CHANNEL_1, 100);
-//  __HAL_TIM_SET_DUTYCYCLE(&htim1, TIM_CHANNEL_2, 100);
-//  __HAL_TIM_SET_DUTYCYCLE(&htim1, TIM_CHANNEL_3, 100);
+
 
   /* USER CODE END 2 */
 

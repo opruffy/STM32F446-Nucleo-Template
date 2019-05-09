@@ -48,8 +48,8 @@
 /* USER CODE END Includes */
 
 /* Private define ------------------------------------------------------------*/
-#define PERIOD 100
-#define PRESCALER 4999
+#define PERIOD 2
+#define PRESCALER 4499
 
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC

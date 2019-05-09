@@ -11,6 +11,8 @@
 #include "stm32f4xx_hal_def.h"
 
 #include "motor.h"
+
+#include "adc.h"
 #include "tim.h"
 
 #define LL_TIM_CHANNEL_CH1		TIM_CHANNEL_1
@@ -34,7 +36,7 @@ const static uint8_t commutationTable[6][6] =
 };
 
 
-volatile uint8_t dutycycle = 100;
+//volatile uint8_t dutycycle = 100;
 //volatile uint32_t period_rampe = PERIOD_START_VALUE;
 //volatile uint32_t p_abtastung = PERIOD_START_VALUE*100;
 
@@ -135,11 +137,13 @@ void kommutierung_counter(void)
 	}
 }
 
+
+
 void set_kommutierung(uint8_t counter)
 {
 	commutation_counter = counter;
-
 }
+
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
@@ -154,14 +158,20 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		uint8_t BH3 = commutationTable[commutation_counter][4];
 		uint8_t BL3 = commutationTable[commutation_counter][5];
 
+		uint32_t duty_cycle = 0;
+		uint32_t adc_value = HAL_ADC_GetValue(&hadc1); //Get ADC Value
+		duty_cycle = adc_value * 100 / 4096;
+
 		if(BH1)
 		{
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
+			__HAL_TIM_SET_DUTYCYCLE(&htim1, TIM_CHANNEL_1, duty_cycle);
+//			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
 		    HAL_GPIO_WritePin(P1_EN_GPIO_Port, P1_EN_Pin, GPIO_PIN_SET);
 		}
 		else
 		{
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
+			__HAL_TIM_SET_DUTYCYCLE(&htim1, TIM_CHANNEL_1, 0);
+//			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
 
 			if(BL1)
 			{
@@ -175,12 +185,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 		if(BH2)
 		{
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
+			__HAL_TIM_SET_DUTYCYCLE(&htim1, TIM_CHANNEL_2, duty_cycle);
+//			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
 		    HAL_GPIO_WritePin(P2_EN_GPIO_Port, P2_EN_Pin, GPIO_PIN_SET);
 		}
 		else
 		{
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
+			__HAL_TIM_SET_DUTYCYCLE(&htim1, TIM_CHANNEL_2, 0);
+//			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
 
 			if(BL2)
 			{
@@ -194,12 +206,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 		if(BH3)
 		{
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET);
+			__HAL_TIM_SET_DUTYCYCLE(&htim1, TIM_CHANNEL_3, duty_cycle);
+//			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET);
 		    HAL_GPIO_WritePin(P3_EN_GPIO_Port, P3_EN_Pin, GPIO_PIN_SET);
 		}
 		else
 		{
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET);
+			__HAL_TIM_SET_DUTYCYCLE(&htim1, TIM_CHANNEL_3, 0);
+//			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET);
 
 			if(BL3)
 			{
@@ -210,5 +224,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			    HAL_GPIO_WritePin(P3_EN_GPIO_Port, P3_EN_Pin, GPIO_PIN_RESET);
 			}
 		}
+
+		__HAL_TIM_SET_COUNTER(&htim1, 0);
 	}
 }

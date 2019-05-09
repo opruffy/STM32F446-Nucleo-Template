@@ -107,7 +107,6 @@ void MX_GPIO_Init(void)
 
 }
 
-
 /* USER CODE BEGIN 2 */
 uint8_t kommutierung_old_state = 0;
 
