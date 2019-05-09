@@ -107,9 +107,11 @@ void MX_GPIO_Init(void)
 
 }
 
-uint8_t kommutierung_check = 0;
 
 /* USER CODE BEGIN 2 */
+uint8_t kommutierung_old_state = 0;
+
+
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	switch(GPIO_Pin)
@@ -119,19 +121,19 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			if(HAL_GPIO_ReadPin(P1_COMP_GPIO_Port, P1_COMP_Pin) != GPIO_PIN_RESET)
 			{
 				// P1 rising edge
-				if(kommutierung_check == 5)
+				if(kommutierung_old_state == 5)
 				{
 					set_kommutierung(4);
-					kommutierung_check = 4;
+					kommutierung_old_state = 4;
 				}
 			}
 			else
 			{
 				// P1 falling edge
-				if(kommutierung_check == 2)
+				if(kommutierung_old_state == 2)
 				{
 					set_kommutierung(1);
-					kommutierung_check = 1;
+					kommutierung_old_state = 1;
 				}
 			}
 			break;
@@ -141,19 +143,19 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			if(HAL_GPIO_ReadPin(P2_COMP_GPIO_Port, P2_COMP_Pin) != GPIO_PIN_RESET)
 			{
 				// P2 rising edge
-				if(kommutierung_check == 1)
+				if(kommutierung_old_state == 1)
 				{
 					set_kommutierung(0);
-					kommutierung_check = 0;
+					kommutierung_old_state = 0;
 				}
 			}
 			else
 			{
 				// P2 falling edge
-				if(kommutierung_check == 4)
+				if(kommutierung_old_state == 4)
 				{
 					set_kommutierung(3);
-					kommutierung_check = 3;
+					kommutierung_old_state = 3;
 				}
 			}
 			break;
@@ -163,19 +165,19 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			if(HAL_GPIO_ReadPin(P3_COMP_GPIO_Port, P3_COMP_Pin) != GPIO_PIN_RESET)
 			{
 				// P3 rising edge
-				if(kommutierung_check == 3)
+				if(kommutierung_old_state == 3)
 				{
 					set_kommutierung(2);
-					kommutierung_check = 2;
+					kommutierung_old_state = 2;
 				}
 			}
 			else
 			{
 				// P3 falling edge
-				if(kommutierung_check == 0)
+				if(kommutierung_old_state == 0)
 				{
 					set_kommutierung(5);
-					kommutierung_check = 5;
+					kommutierung_old_state = 5;
 				}
 			}
 			break;
