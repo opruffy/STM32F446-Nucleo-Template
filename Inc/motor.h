@@ -10,7 +10,6 @@
 
 void HAL_TIM_PeriodElapsedCallback();
 
-void kommutierung_counter(void);
 void set_kommutierung(uint8_t counter);
 
 #endif /* MOTOR_H_ */
