@@ -113,7 +113,5 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			    HAL_GPIO_WritePin(P3_EN_GPIO_Port, P3_EN_Pin, GPIO_PIN_RESET);
 			}
 		}
-
-		__HAL_TIM_SET_COUNTER(&htim1, 0);
 	}
 }
