@@ -50,6 +50,7 @@
 void SysTick_Handler(void);
 void EXTI9_5_IRQHandler(void);
 void TIM1_UP_TIM10_IRQHandler(void);
+void TIM6_DAC_IRQHandler(void);
 
 #ifdef __cplusplus
 }

@@ -27,10 +27,27 @@ const static uint8_t commutationTable[6][6] =
 	{	0, 	0, 	1, 	0, 	0, 	1 },	// P3 - falling edge
 };
 
+volatile uint32_t speed_counter = UINT32_MAX;
+volatile uint32_t dutycycle = 10;
 
 void set_kommutierung(uint8_t counter)
 {
 	commutation_counter = counter;
+	speed_counter = __HAL_TIM_GET_COUNTER(&htim6);
+	__HAL_TIM_SET_COUNTER(&htim6, 0);
+
+	if(speed_counter != UINT32_MAX)
+	{
+		dutycycle = HAL_ADC_GetValue(&hadc1) * 100 / 4096;
+
+//		if((speed_counter > 140) && (dutycycle < 100))
+//			dutycycle++;
+//		else if((speed_counter < 140) && (dutycycle > 0))
+//			dutycycle = 0;
+//
+//		if(dutycycle > 100)
+//			dutycycle = 100;
+	}
 }
 
 
@@ -46,10 +63,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 		uint8_t BH3 = commutationTable[commutation_counter][4];
 		uint8_t BL3 = commutationTable[commutation_counter][5];
-
-		uint32_t dutycycle = 0;
-		uint32_t adc_value = HAL_ADC_GetValue(&hadc1); //Get ADC Value
-		dutycycle = adc_value * 100 / 4096;
 
 		if(BH1)
 		{
@@ -113,5 +126,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			    HAL_GPIO_WritePin(P3_EN_GPIO_Port, P3_EN_Pin, GPIO_PIN_RESET);
 			}
 		}
+	}
+	else if(htim == &htim6)
+	{
+		speed_counter = UINT32_MAX;
 	}
 }
