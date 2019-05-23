@@ -98,6 +98,7 @@ int main(void)
   MX_TIM1_Init();
   MX_ADC1_Init();
   MX_TIM6_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
 
@@ -111,7 +112,15 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim6);
   HAL_TIM_Base_Start(&htim6);
 
+  // ADC
   HAL_ADC_Start(&hadc1);
+
+  // TIM2
+  LL_TIM_EnableIT_UPDATE(TIM2);
+  //LL_TIM_EnableCounter(TIM2);
+  LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH4);
+
+
 
   /* USER CODE END 2 */
 
@@ -123,8 +132,17 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-	  HAL_GPIO_TogglePin(LD2_GPIO_Port,LD2_Pin);
-	  HAL_Delay(blinkDelay); //Busy wait
+//	  HAL_GPIO_TogglePin(LD2_GPIO_Port,LD2_Pin);
+
+//	  if(get_active_led() != 1)
+//	  {
+//		  HAL_Delay(blinkDelay); //Busy wait
+//		  set_active_led(1);
+//		  HAL_TIM_Base_Start_IT(&htim2);
+//		  HAL_TIM_Base_Start(&htim2);
+//		  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
+//	  }
+
 	  //TIM1->CCER &= ~0x01;
   }
   /* USER CODE END 3 */

@@ -42,6 +42,17 @@
 #define __MAIN_H__
 
 /* Includes ------------------------------------------------------------------*/
+#include "stm32f4xx_ll_tim.h"
+#include "stm32f4xx_ll_bus.h"
+#include "stm32f4xx_ll_cortex.h"
+#include "stm32f4xx_ll_rcc.h"
+#include "stm32f4xx_ll_system.h"
+#include "stm32f4xx_ll_utils.h"
+#include "stm32f4xx_ll_pwr.h"
+#include "stm32f4xx_ll_gpio.h"
+#include "stm32f4xx_ll_dma.h"
+
+#include "stm32f4xx_ll_exti.h"
 
 /* USER CODE BEGIN Includes */
 #include <inttypes.h>
@@ -53,6 +64,11 @@
 
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC
+#define LED1_Pin GPIO_PIN_2
+#define LED1_GPIO_Port GPIOC
+#define RPM_Pin GPIO_PIN_3
+#define RPM_GPIO_Port GPIOC
+#define RPM_EXTI_IRQn EXTI3_IRQn
 #define LD2_Pin GPIO_PIN_5
 #define LD2_GPIO_Port GPIOA
 #define P3_EN_Pin GPIO_PIN_13

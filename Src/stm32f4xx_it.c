@@ -36,6 +36,31 @@
 #include "stm32f4xx_it.h"
 
 /* USER CODE BEGIN 0 */
+volatile uint8_t active_led = 0;
+
+void set_active_led(uint8_t tmp)
+{
+	active_led = tmp;
+}
+
+uint8_t get_active_led()
+{
+	return active_led;
+}
+
+volatile uint32_t bitcounter = 0;
+volatile uint32_t ledcounter = 0;
+volatile uint32_t colorcounter = 0;
+
+static uint8_t ledtable[6][8] =
+{
+		{	1, 1, 1, 1, 1, 1, 1, 1 },
+		{	0, 0, 0, 0, 0, 0, 0, 0 },
+		{	0, 0, 0, 0, 0, 0, 0, 0 },
+		{	0, 0, 0, 0, 0, 0, 0, 0 },
+		{	1, 1, 1, 1, 1, 1, 1, 1 },
+		{	0, 0, 0, 0, 0, 0, 0, 0 },
+};
 
 /* USER CODE END 0 */
 
@@ -70,6 +95,20 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
+* @brief This function handles EXTI line 3 interrupt.
+*/
+void EXTI3_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI3_IRQn 0 */
+
+  /* USER CODE END EXTI3_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
+  /* USER CODE BEGIN EXTI3_IRQn 1 */
+
+  /* USER CODE END EXTI3_IRQn 1 */
+}
+
+/**
 * @brief This function handles EXTI line[9:5] interrupts.
 */
 void EXTI9_5_IRQHandler(void)
@@ -96,6 +135,55 @@ void TIM1_UP_TIM10_IRQHandler(void)
   /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 1 */
 
   /* USER CODE END TIM1_UP_TIM10_IRQn 1 */
+}
+
+/**
+* @brief This function handles TIM2 global interrupt.
+*/
+void TIM2_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM2_IRQn 0 */
+
+  /* USER CODE END TIM2_IRQn 0 */
+  /* USER CODE BEGIN TIM2_IRQn 1 */
+
+	if(LL_TIM_IsActiveFlag_UPDATE(TIM2))
+	{
+		if(bitcounter < 24)
+		{
+			if(ledtable[(bitcounter / 8)][(bitcounter % 8)] == 0)
+			{
+				LL_TIM_OC_SetCompareCH4(TIM2, 32);
+			}
+			else
+			{
+				LL_TIM_OC_SetCompareCH4(TIM2, 63);
+			}
+		}
+		else if(bitcounter > 24 && bitcounter < 24*2)
+		{
+			if(ledtable[(bitcounter / 8)][(bitcounter % 8)] == 0)
+			{
+				LL_TIM_OC_SetCompareCH4(TIM2, 32);
+			}
+			else
+			{
+				LL_TIM_OC_SetCompareCH4(TIM2, 63);
+			}
+		}
+		else if(bitcounter == 48)
+		{
+			LL_TIM_OC_SetCompareCH4(TIM2, 0);
+		}
+		else if(bitcounter >= 50+50)
+			bitcounter = -1;
+
+		bitcounter++;
+
+	}
+	LL_TIM_ClearFlag_UPDATE(TIM2);
+
+  /* USER CODE END TIM2_IRQn 1 */
 }
 
 /**

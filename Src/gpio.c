@@ -70,6 +70,9 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
@@ -80,6 +83,19 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = LED1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LED1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = RPM_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(RPM_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = LD2_Pin;
@@ -102,6 +118,9 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI3_IRQn);
+
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
@@ -178,6 +197,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 					set_kommutierung(5);
 					kommutierung_old_state = 5;
 				}
+			}
+			break;
+
+		case RPM_Pin:
+			if(HAL_GPIO_ReadPin(RPM_GPIO_Port, RPM_Pin) != GPIO_PIN_RESET)
+			{
+				HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
 			}
 			break;
 
