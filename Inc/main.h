@@ -69,8 +69,12 @@
 #define RPM_Pin GPIO_PIN_3
 #define RPM_GPIO_Port GPIOC
 #define RPM_EXTI_IRQn EXTI3_IRQn
-#define LD2_Pin GPIO_PIN_5
-#define LD2_GPIO_Port GPIOA
+#define LED_1_Pin GPIO_PIN_5
+#define LED_1_GPIO_Port GPIOA
+#define LED_2_Pin GPIO_PIN_5
+#define LED_2_GPIO_Port GPIOC
+#define LED_9_Pin GPIO_PIN_12
+#define LED_9_GPIO_Port GPIOB
 #define P3_EN_Pin GPIO_PIN_13
 #define P3_EN_GPIO_Port GPIOB
 #define P2_EN_Pin GPIO_PIN_14
@@ -86,12 +90,26 @@
 #define P3_COMP_Pin GPIO_PIN_9
 #define P3_COMP_GPIO_Port GPIOC
 #define P3_COMP_EXTI_IRQn EXTI9_5_IRQn
+#define SWITCH_Pin GPIO_PIN_12
+#define SWITCH_GPIO_Port GPIOA
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
+#define LED_4_Pin GPIO_PIN_15
+#define LED_4_GPIO_Port GPIOA
+#define LED_8_Pin GPIO_PIN_10
+#define LED_8_GPIO_Port GPIOC
+#define LED_7_Pin GPIO_PIN_11
+#define LED_7_GPIO_Port GPIOC
+#define LED_6_Pin GPIO_PIN_12
+#define LED_6_GPIO_Port GPIOC
+#define LED_5_Pin GPIO_PIN_2
+#define LED_5_GPIO_Port GPIOD
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
+#define LED_3_Pin GPIO_PIN_7
+#define LED_3_GPIO_Port GPIOB
 
 /* ########################## Assert Selection ############################## */
 /**

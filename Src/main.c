@@ -40,11 +40,14 @@
 #include "main.h"
 #include "stm32f4xx_hal.h"
 #include "adc.h"
+#include "dma.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
 #include "motor.h"
+#include "terminal.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -64,6 +67,8 @@ void SystemClock_Config(void);
 
 /* USER CODE BEGIN 0 */
 volatile uint16_t blinkDelay = 1000;
+
+uint8_t pData[] = {0x55};
 /* USER CODE END 0 */
 
 /**
@@ -95,10 +100,17 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_TIM1_Init();
   MX_ADC1_Init();
   MX_TIM6_Init();
   MX_TIM2_Init();
+  MX_TIM7_Init();
+  MX_USART2_UART_Init();
+  MX_TIM8_Init();
+  MX_TIM9_Init();
+  MX_TIM10_Init();
+  MX_TIM11_Init();
   /* USER CODE BEGIN 2 */
 
 
@@ -112,6 +124,18 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim6);
   HAL_TIM_Base_Start(&htim6);
 
+  HAL_TIM_Base_Start(&htim7);
+
+//  HAL_TIM_Base_Start_IT(&htim8);
+//  HAL_TIM_Base_Start(&htim8);
+
+  HAL_TIM_Base_Start(&htim10);
+
+  HAL_NVIC_DisableIRQ(EXTI9_5_IRQn);
+
+  HAL_TIM_Base_Start_IT(&htim9);
+  HAL_TIM_Base_Start_IT(&htim11);
+
   // ADC
   HAL_ADC_Start(&hadc1);
 
@@ -120,7 +144,7 @@ int main(void)
   //LL_TIM_EnableCounter(TIM2);
   LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH4);
 
-
+  terminal_echo_start();
 
   /* USER CODE END 2 */
 
@@ -132,18 +156,7 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-//	  HAL_GPIO_TogglePin(LD2_GPIO_Port,LD2_Pin);
 
-//	  if(get_active_led() != 1)
-//	  {
-//		  HAL_Delay(blinkDelay); //Busy wait
-//		  set_active_led(1);
-//		  HAL_TIM_Base_Start_IT(&htim2);
-//		  HAL_TIM_Base_Start(&htim2);
-//		  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
-//	  }
-
-	  //TIM1->CCER &= ~0x01;
   }
   /* USER CODE END 3 */
 
@@ -167,11 +180,12 @@ void SystemClock_Config(void)
 
     /**Initializes the CPU, AHB and APB busses clocks 
     */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = 16;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 8;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL.PLLM = 16;
   RCC_OscInitStruct.PLL.PLLN = 360;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 2;
@@ -192,7 +206,7 @@ void SystemClock_Config(void)
     */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLRCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV4;

@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * File Name          : TIM.h
-  * Description        : This file provides code for the configuration
-  *                      of the TIM instances.
+  * File Name          : dma.h
+  * Description        : This file contains all the function prototypes for
+  *                      the dma.c file
   ******************************************************************************
   ** This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
@@ -37,49 +37,29 @@
   ******************************************************************************
   */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __tim_H
-#define __tim_H
+#ifndef __dma_H
+#define __dma_H
+
 #ifdef __cplusplus
  extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
-#include "stm32f4xx_ll_tim.h"
 #include "main.h"
+
+/* DMA memory to memory transfer handles -------------------------------------*/
+extern void _Error_Handler(char*, int);
 
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
 
-extern TIM_HandleTypeDef htim1;
-extern TIM_HandleTypeDef htim6;
-extern TIM_HandleTypeDef htim7;
-extern TIM_HandleTypeDef htim8;
-extern TIM_HandleTypeDef htim9;
-extern TIM_HandleTypeDef htim10;
-extern TIM_HandleTypeDef htim11;
-
 /* USER CODE BEGIN Private defines */
-
-#define __HAL_TIM_SET_DUTYCYCLE(htim, channel, dutycycle) (__HAL_TIM_SET_COMPARE(htim, channel, (__HAL_TIM_GET_AUTORELOAD(htim) * (dutycycle > 100 ? 100 : dutycycle)) / 100))
-#define __HAL_TIM_GET_DUTYCYCLE(htim, channel) (__HAL_TIM_GET_COMPARE(htim, channel) / (__HAL_TIM_GET_AUTORELOAD(htim) * 100))
 
 /* USER CODE END Private defines */
 
-extern void _Error_Handler(char *, int);
-
-void MX_TIM1_Init(void);
-void MX_TIM2_Init(void);
-void MX_TIM6_Init(void);
-void MX_TIM7_Init(void);
-void MX_TIM8_Init(void);
-void MX_TIM9_Init(void);
-void MX_TIM10_Init(void);
-void MX_TIM11_Init(void);
-                    
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-                
+void MX_DMA_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 
@@ -88,11 +68,8 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 #ifdef __cplusplus
 }
 #endif
-#endif /*__ tim_H */
 
-/**
-  * @}
-  */
+#endif /* __dma_H */
 
 /**
   * @}

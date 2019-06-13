@@ -67,6 +67,12 @@ static uint8_t ledtable[6][8] =
 /* External variables --------------------------------------------------------*/
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim6;
+extern TIM_HandleTypeDef htim8;
+extern TIM_HandleTypeDef htim9;
+extern TIM_HandleTypeDef htim10;
+extern TIM_HandleTypeDef htim11;
+extern DMA_HandleTypeDef hdma_usart2_rx;
+extern DMA_HandleTypeDef hdma_usart2_tx;
 
 /******************************************************************************/
 /*            Cortex-M4 Processor Interruption and Exception Handlers         */ 
@@ -109,6 +115,34 @@ void EXTI3_IRQHandler(void)
 }
 
 /**
+* @brief This function handles DMA1 stream5 global interrupt.
+*/
+void DMA1_Stream5_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream5_IRQn 0 */
+
+  /* USER CODE END DMA1_Stream5_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_usart2_rx);
+  /* USER CODE BEGIN DMA1_Stream5_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream5_IRQn 1 */
+}
+
+/**
+* @brief This function handles DMA1 stream6 global interrupt.
+*/
+void DMA1_Stream6_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream6_IRQn 0 */
+
+  /* USER CODE END DMA1_Stream6_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_usart2_tx);
+  /* USER CODE BEGIN DMA1_Stream6_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream6_IRQn 1 */
+}
+
+/**
 * @brief This function handles EXTI line[9:5] interrupts.
 */
 void EXTI9_5_IRQHandler(void)
@@ -125,6 +159,21 @@ void EXTI9_5_IRQHandler(void)
 }
 
 /**
+* @brief This function handles TIM1 break interrupt and TIM9 global interrupt.
+*/
+void TIM1_BRK_TIM9_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM1_BRK_TIM9_IRQn 0 */
+
+  /* USER CODE END TIM1_BRK_TIM9_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim1);
+  HAL_TIM_IRQHandler(&htim9);
+  /* USER CODE BEGIN TIM1_BRK_TIM9_IRQn 1 */
+
+  /* USER CODE END TIM1_BRK_TIM9_IRQn 1 */
+}
+
+/**
 * @brief This function handles TIM1 update interrupt and TIM10 global interrupt.
 */
 void TIM1_UP_TIM10_IRQHandler(void)
@@ -132,9 +181,25 @@ void TIM1_UP_TIM10_IRQHandler(void)
   /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 0 */
   /* USER CODE END TIM1_UP_TIM10_IRQn 0 */
   HAL_TIM_IRQHandler(&htim1);
+  HAL_TIM_IRQHandler(&htim10);
   /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 1 */
 
   /* USER CODE END TIM1_UP_TIM10_IRQn 1 */
+}
+
+/**
+* @brief This function handles TIM1 trigger and commutation interrupts and TIM11 global interrupt.
+*/
+void TIM1_TRG_COM_TIM11_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM1_TRG_COM_TIM11_IRQn 0 */
+
+  /* USER CODE END TIM1_TRG_COM_TIM11_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim1);
+  HAL_TIM_IRQHandler(&htim11);
+  /* USER CODE BEGIN TIM1_TRG_COM_TIM11_IRQn 1 */
+
+  /* USER CODE END TIM1_TRG_COM_TIM11_IRQn 1 */
 }
 
 /**
@@ -184,6 +249,20 @@ void TIM2_IRQHandler(void)
 	LL_TIM_ClearFlag_UPDATE(TIM2);
 
   /* USER CODE END TIM2_IRQn 1 */
+}
+
+/**
+* @brief This function handles TIM8 update interrupt and TIM13 global interrupt.
+*/
+void TIM8_UP_TIM13_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 0 */
+
+  /* USER CODE END TIM8_UP_TIM13_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim8);
+  /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 1 */
+
+  /* USER CODE END TIM8_UP_TIM13_IRQn 1 */
 }
 
 /**

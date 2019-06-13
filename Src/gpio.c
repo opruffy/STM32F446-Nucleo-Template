@@ -40,8 +40,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "gpio.h"
 /* USER CODE BEGIN 0 */
-#include "main.h"
-#include "motor.h"
+#include "led.h"
+#include "commutation.h"
 /* USER CODE END 0 */
 
 /*----------------------------------------------------------------------------*/
@@ -68,15 +68,21 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, LED1_Pin|LED_2_Pin|LED_8_Pin|LED_7_Pin 
+                          |LED_6_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED_1_Pin|LED_4_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, P3_EN_Pin|P2_EN_Pin|P1_EN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, LED_9_Pin|P3_EN_Pin|P2_EN_Pin|P1_EN_Pin 
+                          |LED_3_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LED_5_GPIO_Port, LED_5_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -84,12 +90,14 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = LED1_Pin;
+  /*Configure GPIO pins : PCPin PCPin PCPin PCPin 
+                           PCPin */
+  GPIO_InitStruct.Pin = LED1_Pin|LED_2_Pin|LED_8_Pin|LED_7_Pin 
+                          |LED_6_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED1_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = RPM_Pin;
@@ -97,15 +105,17 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(RPM_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = LD2_Pin;
+  /*Configure GPIO pins : PAPin PAPin */
+  GPIO_InitStruct.Pin = LED_1_Pin|LED_4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PBPin PBPin PBPin */
-  GPIO_InitStruct.Pin = P3_EN_Pin|P2_EN_Pin|P1_EN_Pin;
+  /*Configure GPIO pins : PBPin PBPin PBPin PBPin 
+                           PBPin */
+  GPIO_InitStruct.Pin = LED_9_Pin|P3_EN_Pin|P2_EN_Pin|P1_EN_Pin 
+                          |LED_3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -117,6 +127,19 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = SWITCH_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(SWITCH_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = LED_5_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LED_5_GPIO_Port, &GPIO_InitStruct);
+
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI3_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI3_IRQn);
@@ -127,89 +150,10 @@ void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 2 */
-uint8_t kommutierung_old_state = 0;
-
-
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	switch(GPIO_Pin)
-	{
-		case P1_COMP_Pin: //External Interrupt on B1
-
-			if(HAL_GPIO_ReadPin(P1_COMP_GPIO_Port, P1_COMP_Pin) != GPIO_PIN_RESET)
-			{
-				// P1 rising edge
-				if(kommutierung_old_state == 5)
-				{
-					set_kommutierung(4);
-					kommutierung_old_state = 4;
-				}
-			}
-			else
-			{
-				// P1 falling edge
-				if(kommutierung_old_state == 2)
-				{
-					set_kommutierung(1);
-					kommutierung_old_state = 1;
-				}
-			}
-			break;
-
-		case P2_COMP_Pin:
-
-			if(HAL_GPIO_ReadPin(P2_COMP_GPIO_Port, P2_COMP_Pin) != GPIO_PIN_RESET)
-			{
-				// P2 rising edge
-				if(kommutierung_old_state == 1)
-				{
-					set_kommutierung(0);
-					kommutierung_old_state = 0;
-				}
-			}
-			else
-			{
-				// P2 falling edge
-				if(kommutierung_old_state == 4)
-				{
-					set_kommutierung(3);
-					kommutierung_old_state = 3;
-				}
-			}
-			break;
-
-		case P3_COMP_Pin:
-
-			if(HAL_GPIO_ReadPin(P3_COMP_GPIO_Port, P3_COMP_Pin) != GPIO_PIN_RESET)
-			{
-				// P3 rising edge
-				if(kommutierung_old_state == 3)
-				{
-					set_kommutierung(2);
-					kommutierung_old_state = 2;
-				}
-			}
-			else
-			{
-				// P3 falling edge
-				if(kommutierung_old_state == 0)
-				{
-					set_kommutierung(5);
-					kommutierung_old_state = 5;
-				}
-			}
-			break;
-
-		case RPM_Pin:
-			if(HAL_GPIO_ReadPin(RPM_GPIO_Port, RPM_Pin) != GPIO_PIN_RESET)
-			{
-				HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
-			}
-			break;
-
-		default:
-			break;
-	}
+	commutation_irq_gpio(GPIO_Pin);
+	led_speed_irq(GPIO_Pin);
 }
 /* USER CODE END 2 */
 

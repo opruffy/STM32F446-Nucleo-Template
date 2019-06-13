@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * File Name          : TIM.h
+  * File Name          : dma.c
   * Description        : This file provides code for the configuration
-  *                      of the TIM instances.
+  *                      of all the requested memory to memory DMA transfers.
   ******************************************************************************
   ** This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
@@ -36,59 +36,42 @@
   *
   ******************************************************************************
   */
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __tim_H
-#define __tim_H
-#ifdef __cplusplus
- extern "C" {
-#endif
-
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
-#include "stm32f4xx_ll_tim.h"
-#include "main.h"
+#include "dma.h"
 
-/* USER CODE BEGIN Includes */
+/* USER CODE BEGIN 0 */
 
-/* USER CODE END Includes */
+/* USER CODE END 0 */
 
-extern TIM_HandleTypeDef htim1;
-extern TIM_HandleTypeDef htim6;
-extern TIM_HandleTypeDef htim7;
-extern TIM_HandleTypeDef htim8;
-extern TIM_HandleTypeDef htim9;
-extern TIM_HandleTypeDef htim10;
-extern TIM_HandleTypeDef htim11;
+/*----------------------------------------------------------------------------*/
+/* Configure DMA                                                              */
+/*----------------------------------------------------------------------------*/
 
-/* USER CODE BEGIN Private defines */
+/* USER CODE BEGIN 1 */
 
-#define __HAL_TIM_SET_DUTYCYCLE(htim, channel, dutycycle) (__HAL_TIM_SET_COMPARE(htim, channel, (__HAL_TIM_GET_AUTORELOAD(htim) * (dutycycle > 100 ? 100 : dutycycle)) / 100))
-#define __HAL_TIM_GET_DUTYCYCLE(htim, channel) (__HAL_TIM_GET_COMPARE(htim, channel) / (__HAL_TIM_GET_AUTORELOAD(htim) * 100))
+/* USER CODE END 1 */
 
-/* USER CODE END Private defines */
+/** 
+  * Enable DMA controller clock
+  */
+void MX_DMA_Init(void) 
+{
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
 
-extern void _Error_Handler(char *, int);
+  /* DMA interrupt init */
+  /* DMA1_Stream5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
+  /* DMA1_Stream6_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
 
-void MX_TIM1_Init(void);
-void MX_TIM2_Init(void);
-void MX_TIM6_Init(void);
-void MX_TIM7_Init(void);
-void MX_TIM8_Init(void);
-void MX_TIM9_Init(void);
-void MX_TIM10_Init(void);
-void MX_TIM11_Init(void);
-                    
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-                
-
-/* USER CODE BEGIN Prototypes */
-
-/* USER CODE END Prototypes */
-
-#ifdef __cplusplus
 }
-#endif
-#endif /*__ tim_H */
+
+/* USER CODE BEGIN 2 */
+
+/* USER CODE END 2 */
 
 /**
   * @}
