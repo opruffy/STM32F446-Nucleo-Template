@@ -66,9 +66,8 @@
 #define B1_GPIO_Port GPIOC
 #define LED1_Pin GPIO_PIN_2
 #define LED1_GPIO_Port GPIOC
-#define RPM_Pin GPIO_PIN_3
-#define RPM_GPIO_Port GPIOC
-#define RPM_EXTI_IRQn EXTI3_IRQn
+#define RPM_Pin GPIO_PIN_1
+#define RPM_GPIO_Port GPIOA
 #define LED_1_Pin GPIO_PIN_5
 #define LED_1_GPIO_Port GPIOA
 #define LED_2_Pin GPIO_PIN_5

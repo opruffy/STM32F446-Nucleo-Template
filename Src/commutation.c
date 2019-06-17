@@ -81,7 +81,7 @@ int32_t regler(uint32_t speed)
 
 	pData[2] = y;
 
-	terminal_tx(pData, sizeof(pData));
+	//terminal_tx(pData, sizeof(pData));
 
 	if( y > 85 )
 		y = 85;

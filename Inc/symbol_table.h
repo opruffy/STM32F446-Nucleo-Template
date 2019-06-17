@@ -9,7 +9,7 @@
 #define SYMBOL_TABLE_H_
 
 #define ZAHLBREITE 	5
-#define TIMECOUNT	8
+#define TIMECOUNT	18
 
 enum nmb_counter
 {
@@ -29,6 +29,7 @@ enum sym_counter
 {
 	doppelpunkt = 10,
 	punkt = 11,
+	leerzeichen = 12,
 };
 
 
@@ -152,6 +153,16 @@ const static uint8_t symbol_table[][8][ZAHLBREITE] =
 			{	0,	0,	0, 	0, 0 },
 			{	0,	0,	0, 	0, 0 },
 			{	0,	1,	0, 	0, 0 },
+			{	0,	0,	0, 	0, 0 },
+	},
+	{	// leerzeichen
+			{	0,	0,	0, 	0, 0 },
+			{	0,	0,	0, 	0, 0 },
+			{	0,	0,	0, 	0, 0 },
+			{	0,	0,	0, 	0, 0 },
+			{	0,	0,	0, 	0, 0 },
+			{	0,	0,	0, 	0, 0 },
+			{	0,	0,	0, 	0, 0 },
 			{	0,	0,	0, 	0, 0 },
 	},
 };

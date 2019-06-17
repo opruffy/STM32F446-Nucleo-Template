@@ -40,11 +40,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "tim.h"
 
-/* USER CODE BEGIN 0 */
+#include "gpio.h"
 
+/* USER CODE BEGIN 0 */
+#include "led.h"
 /* USER CODE END 0 */
 
 TIM_HandleTypeDef htim1;
+TIM_HandleTypeDef htim5;
 TIM_HandleTypeDef htim6;
 TIM_HandleTypeDef htim7;
 TIM_HandleTypeDef htim8;
@@ -171,6 +174,39 @@ void MX_TIM2_Init(void)
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   GPIO_InitStruct.Alternate = LL_GPIO_AF_1;
   LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+}
+/* TIM5 init function */
+void MX_TIM5_Init(void)
+{
+  TIM_MasterConfigTypeDef sMasterConfig;
+  TIM_IC_InitTypeDef sConfigIC;
+
+  htim5.Instance = TIM5;
+  htim5.Init.Prescaler = 89;
+  htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim5.Init.Period = 65535;
+  htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  if (HAL_TIM_IC_Init(&htim5) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim5, &sMasterConfig) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+  sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;
+  sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+  sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+  sConfigIC.ICFilter = 0;
+  if (HAL_TIM_IC_ConfigChannel(&htim5, &sConfigIC, TIM_CHANNEL_2) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
 
 }
 /* TIM6 init function */
@@ -410,6 +446,37 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
   /* USER CODE END TIM11_MspInit 1 */
   }
 }
+
+void HAL_TIM_IC_MspInit(TIM_HandleTypeDef* tim_icHandle)
+{
+
+  GPIO_InitTypeDef GPIO_InitStruct;
+  if(tim_icHandle->Instance==TIM5)
+  {
+  /* USER CODE BEGIN TIM5_MspInit 0 */
+
+  /* USER CODE END TIM5_MspInit 0 */
+    /* TIM5 clock enable */
+    __HAL_RCC_TIM5_CLK_ENABLE();
+  
+    /**TIM5 GPIO Configuration    
+    PA1     ------> TIM5_CH2 
+    */
+    GPIO_InitStruct.Pin = RPM_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Alternate = GPIO_AF2_TIM5;
+    HAL_GPIO_Init(RPM_GPIO_Port, &GPIO_InitStruct);
+
+    /* TIM5 interrupt Init */
+    HAL_NVIC_SetPriority(TIM5_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(TIM5_IRQn);
+  /* USER CODE BEGIN TIM5_MspInit 1 */
+
+  /* USER CODE END TIM5_MspInit 1 */
+  }
+}
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
 {
 
@@ -581,10 +648,41 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* tim_baseHandle)
 
   /* USER CODE END TIM11_MspDeInit 1 */
   }
+}
+
+void HAL_TIM_IC_MspDeInit(TIM_HandleTypeDef* tim_icHandle)
+{
+
+  if(tim_icHandle->Instance==TIM5)
+  {
+  /* USER CODE BEGIN TIM5_MspDeInit 0 */
+
+  /* USER CODE END TIM5_MspDeInit 0 */
+    /* Peripheral clock disable */
+    __HAL_RCC_TIM5_CLK_DISABLE();
+  
+    /**TIM5 GPIO Configuration    
+    PA1     ------> TIM5_CH2 
+    */
+    HAL_GPIO_DeInit(RPM_GPIO_Port, RPM_Pin);
+
+    /* TIM5 interrupt Deinit */
+    HAL_NVIC_DisableIRQ(TIM5_IRQn);
+  /* USER CODE BEGIN TIM5_MspDeInit 1 */
+
+  /* USER CODE END TIM5_MspDeInit 1 */
+  }
 } 
 
 /* USER CODE BEGIN 1 */
-
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+{
+	if(htim == &htim5)
+	{
+		led_speed();
+		__HAL_TIM_SET_COUNTER(htim, 0);
+	}
+}
 /* USER CODE END 1 */
 
 /**

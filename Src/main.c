@@ -111,6 +111,7 @@ int main(void)
   MX_TIM9_Init();
   MX_TIM10_Init();
   MX_TIM11_Init();
+  MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
 
 
@@ -145,6 +146,8 @@ int main(void)
   LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH4);
 
   terminal_echo_start();
+
+  HAL_TIM_IC_Start_IT(&htim5, TIM_CHANNEL_2);
 
   /* USER CODE END 2 */
 

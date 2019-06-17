@@ -10,9 +10,9 @@
 uint8_t sec = 55;
 uint8_t min = 58;
 uint8_t hour = 0;
-uint8_t day = 0;
-uint8_t month = 0;
-uint8_t year = 0;
+uint8_t day = 17;
+uint8_t month = 6;
+uint8_t year = 19;
 
 
 void clock_inc()
@@ -33,6 +33,18 @@ void clock_inc()
 			{
 				day++;
 				hour = 0;
+
+				if(day > 31)
+				{
+					month++;
+					day = 1;
+
+					if(month > 12)
+					{
+						year++;
+						month = 1;
+					}
+				}
 			}
 		}
 
@@ -41,17 +53,37 @@ void clock_inc()
 
 void clock_setSec(uint8_t value)
 {
-	sec = value;
+	if(sec < 60)
+		sec = value;
 }
 
 void clock_setMin(uint8_t value)
 {
-	min = value;
+	if(min < 60)
+		min = value;
 }
 
 void clock_setHour(uint8_t value)
 {
-	hour = value;
+	if(hour < 24)
+		hour = value;
+}
+
+void clock_setDay(uint8_t value)
+{
+	if((day > 0) && (day <= 31))
+		day = value;
+}
+
+void clock_setMonth(uint8_t value)
+{
+	if((month > 0) && (month <= 12))
+		month = value;
+}
+
+void clock_setYear(uint8_t value)
+{
+	year = value;
 }
 
 uint8_t clock_getSec()
@@ -67,4 +99,19 @@ uint8_t clock_getMin()
 uint8_t clock_getHour()
 {
 	return hour;
+}
+
+uint8_t clock_getDay()
+{
+	return day;
+}
+
+uint8_t clock_getMonth()
+{
+	return month;
+}
+
+uint8_t clock_getYear()
+{
+	return year;
 }
