@@ -40,7 +40,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "gpio.h"
 /* USER CODE BEGIN 0 */
-#include "led.h"
 #include "commutation.h"
 /* USER CODE END 0 */
 
@@ -144,7 +143,6 @@ void MX_GPIO_Init(void)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	commutation_irq_gpio(GPIO_Pin);
-	led_speed_irq(GPIO_Pin);
 }
 /* USER CODE END 2 */
 

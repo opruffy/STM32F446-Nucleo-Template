@@ -10,6 +10,8 @@
 #include "usart.h"
 
 #include "clock.h"
+#include "led.h"
+#include "snake.h"
 
 uint8_t uart_tx_dma_ready = 1;
 uint8_t uart_rx_state = 0;
@@ -20,7 +22,7 @@ uint8_t pData_tx[10] = {0};
 uint8_t pData_uhrzeit[6] = {0};
 
 
-void terminal_echo_start()
+void terminal_rx_start()
 {
 	HAL_UART_Receive_DMA(&huart2, pData_rx, 1);
 }
@@ -48,11 +50,26 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 				HAL_UART_Receive_DMA(&huart2, pData_rx, 6);
 				uart_rx_state = 1;
 				break;
-			case 'd':
+			case 'i':
 				HAL_UART_AbortReceive(&huart2);
 				HAL_UART_Receive_DMA(&huart2, pData_rx, 6);
 				uart_rx_state = 2;
 				break;
+			case 't':
+				led_set_type();
+			break;
+			case 'w':
+				snake_change_dir(UP);
+			break;
+			case 'a':
+				snake_change_dir(LEFT);
+			break;
+			case 's':
+				snake_change_dir(DOWN);
+			break;
+			case 'd':
+				snake_change_dir(RIGHT);
+			break;
 			default:
 				break;
 			}
@@ -79,11 +96,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 			HAL_UART_Receive_DMA(&huart2, pData_rx, 1);
 			uart_rx_state = 0;
 		}
-
-
-//		HAL_UART_Receive_DMA(&huart2, pData_rx, sizeof(pData_rx));
-//		HAL_UART_Transmit_DMA(&huart2, pData_tx, sizeof(pData_tx));
-
 	}
 }
 

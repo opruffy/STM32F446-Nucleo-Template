@@ -46,7 +46,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-#include "motor.h"
+#include "commutation.h"
 #include "terminal.h"
 /* USER CODE END Includes */
 
@@ -114,16 +114,10 @@ int main(void)
   MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
 
-
-  HAL_TIM_Base_Start_IT(&htim1);
-  HAL_TIM_Base_Start(&htim1);
-
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+  commutation_start();
 
   HAL_TIM_Base_Start_IT(&htim6);
-  HAL_TIM_Base_Start(&htim6);
+//  HAL_TIM_Base_Start(&htim6);
 
   HAL_TIM_Base_Start(&htim7);
 
@@ -145,7 +139,7 @@ int main(void)
   //LL_TIM_EnableCounter(TIM2);
   LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH4);
 
-  terminal_echo_start();
+  terminal_rx_start();
 
   HAL_TIM_IC_Start_IT(&htim5, TIM_CHANNEL_2);
 

@@ -59,7 +59,7 @@
 /* USER CODE END Includes */
 
 /* Private define ------------------------------------------------------------*/
-#define PERIOD 200
+#define PERIOD 100
 #define PRESCALER 49
 
 #define B1_Pin GPIO_PIN_13

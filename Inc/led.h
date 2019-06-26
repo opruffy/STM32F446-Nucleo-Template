@@ -10,7 +10,7 @@
 
 void led_resetValue(void);
 void led_speed(void);
-void led_speed_irq(uint16_t GPIO_Pin);
+void led_set_type(void);
 void led_irq(void);
 
 #endif /* LED_H_ */

@@ -62,35 +62,44 @@ int32_t regler(uint32_t speed)
 		esum = -100;
 
 	Kp = 1;
-	Ki = 1;
+	Ki = 0;
 
 	int32_t y = Kp * e + Ki * esum + ruhelage;
 
-	uint8_t pData[3] = {0};
+//	uint8_t pData[3] = {0};
+//
+//	if(e < 0)
+//	{
+//		pData[0] = '-';
+//		pData[1] = (uint8_t)e * (-1);
+//	}
+//	else
+//	{
+//		pData[0] = '+';
+//		pData[1] = (uint8_t)e;
+//	}
+//
+//	pData[2] = y;
+//
+//	terminal_tx(pData, sizeof(pData));
 
-	if(e < 0)
-	{
-		pData[0] = '-';
-		pData[1] = (uint8_t)e * (-1);
-	}
-	else
-	{
-		pData[0] = '+';
-		pData[1] = (uint8_t)e;
-	}
+	if( y > 100 )
+		y = 100;
+	else if( y < 10 )
+		y = 10;
 
-	pData[2] = y;
-
-	//terminal_tx(pData, sizeof(pData));
-
-	if( y > 85 )
-		y = 85;
-	else if( y < 0 )
-		y = 0;
-
-	return y;
+	return 60;
 }
 
+
+void commutation_start()
+{
+	HAL_TIM_Base_Start_IT(&htim1);
+
+	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+}
 
 void commutation_set(uint8_t counter)
 {

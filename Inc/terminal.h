@@ -8,7 +8,7 @@
 #ifndef TERMINAL_H_
 #define TERMINAL_H_
 
-void terminal_echo_start(void);
+void terminal_rx_start(void);
 void terminal_tx(uint8_t *pData, uint16_t Size);
 
 #endif /* TERMINAL_H_ */
