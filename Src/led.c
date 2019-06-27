@@ -37,10 +37,10 @@ uint8_t pacmanTable[] = {0, 1, 2};
 uint8_t matrix_show[9][18]={0};
 
 // delay for movement of symbols
-uint8_t delay = 0;
+uint32_t delay = 0;
 
 uint8_t type = 0;
-
+uint8_t rot = 0;
 
 void led_symbol_counter_inc()
 {
@@ -63,21 +63,31 @@ void led_resetValue()
 
 			symbol_end *= 10;
 
-//			delay++;
-//			if(delay > 3)
-//			{
-//				led_counter++;
-//				if(led_counter > symbol_breite-1)
-//				{
-//					led_counter = 0;
-//					led_symbol_counter_inc();
-//				}
-//				delay = 0;
-//			}
-
-			led_counter =  0;
-			symbol_counter = 0;
-			slot_counter = 0;
+			if(rot == 1)
+			{
+				delay++;
+				if(delay > 3000)
+				{
+					slot_counter++;
+					if(slot_counter > 9)
+					{
+						slot_counter = 0;
+						led_counter++;
+						if(led_counter > symbol_breite-1)
+						{
+							led_counter = 0;
+						}
+					}
+					delay = 0;
+				}
+			}
+			else
+			{
+				led_counter =  0;
+				symbol_counter = 0;
+				slot_counter = 0;
+				delay = 0;
+			}
 			break;
 		case 1:
 			// PACMAN
@@ -147,11 +157,25 @@ void led_set_type()
 	led_resetValue();
 }
 
+void led_set_rot()
+{
+	rot++;
+	if(rot > 1)
+		rot = 0;
+
+	led_resetValue();
+}
+
 void led_speed()
 {
 	uint32_t speed = __HAL_TIM_GET_COMPARE(&htim5, TIM_CHANNEL_2);
+	uint32_t timeslot = 0;
 
-	uint32_t timeslot = (speed / 120);
+	if(type == 0)
+		timeslot = (speed / 120);
+	else
+		timeslot = (speed / 12);
+
 	__HAL_TIM_SET_AUTORELOAD(&htim8, timeslot);
 	__HAL_TIM_SET_COUNTER(&htim8, timeslot-1);
 
@@ -293,12 +317,18 @@ void led_irq()
 			HAL_GPIO_WritePin(LED_8_GPIO_Port, LED_8_Pin, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(LED_9_GPIO_Port, LED_9_Pin, GPIO_PIN_RESET);
 
-			slot_counter++;
-			if(slot_counter > 3)
+			if(state == 0)
 			{
-				slot_counter=0;
-				state = 1;
+				slot_counter++;
+
+				if(slot_counter > 3)
+				{
+					slot_counter=0;
+					state = 1;
+				}
 			}
+			else
+				state = 1;
 		}
 	}
 	else

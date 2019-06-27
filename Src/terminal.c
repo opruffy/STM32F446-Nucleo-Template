@@ -58,6 +58,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 			case 't':
 				led_set_type();
 			break;
+			case 'r':
+				led_set_rot();
+			break;
 			case 'w':
 				snake_change_dir(UP);
 			break;
